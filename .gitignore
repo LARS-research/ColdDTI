@@ -1,0 +1,44 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments and local environment files
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+
+data/**
+!data/
+!data/README_data.md
+
+output/**
+!output/
+
+logs
+
+# Large generated or downloaded artifacts, wherever they appear
+*.cif
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+
+# Logs
+*.log
+*.out
+*.err
+
+
+# Manuscript drafts and local notes
+bioinformatics.pdf
