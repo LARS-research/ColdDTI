@@ -15,9 +15,9 @@ env/
 .idea/
 .vscode/
 
-data/**
-!data/
-!data/README_data.md
+# data/**
+# !data/
+# !data/README_data.md
 
 output/**
 !output/
