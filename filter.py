@@ -7,7 +7,13 @@ import argparse
 import os
 
 def load_structure(cif_file):
-    parser = MMCIFParser(QUIET=True)
+    # Structural annotations below use label_asym_id/label_seq_id, so parse
+    # chains and residues with the same mmCIF identifier convention.
+    parser = MMCIFParser(
+        QUIET=True,
+        auth_chains=False,
+        auth_residues=False,
+    )
     structure = parser.get_structure("structure", cif_file)
     return structure
 
@@ -30,39 +36,97 @@ def extract_sequences(structure):
                 res_maps[chain.id] = res_ids
     return seqs, res_maps
 
-def extract_secondary_structure_blocks(cif_file):
-    """提取结构段为字典列表形式：{'type': 'H', 'start': x, 'end': y}"""
-    cif_dict = MMCIF2Dict(cif_file)
-    conf_types = cif_dict.get('_struct_conf.conf_type_id', [])
-    beg_chain = cif_dict.get('_struct_conf.beg_label_asym_id', [])
-    beg_res = cif_dict.get('_struct_conf.beg_label_seq_id', [])
-    end_chain = cif_dict.get('_struct_conf.end_label_asym_id', [])
-    end_res = cif_dict.get('_struct_conf.end_label_seq_id', [])
+def _as_list(value):
+    if value is None:
+        return []
+    return value if isinstance(value, list) else [value]
 
-    ss_blocks = defaultdict(list)
 
-    for i in range(len(conf_types)):
-        chain_id = beg_chain[i]
-        if chain_id != end_chain[i]:
+def _append_structure_blocks(
+    ss_blocks,
+    seen,
+    block_types,
+    beg_chains,
+    beg_residues,
+    end_chains,
+    end_residues,
+    forced_type=None,
+):
+    columns = [
+        _as_list(block_types),
+        _as_list(beg_chains),
+        _as_list(beg_residues),
+        _as_list(end_chains),
+        _as_list(end_residues),
+    ]
+    if not any(columns):
+        return
+
+    lengths = {len(column) for column in columns}
+    if len(lengths) != 1:
+        raise ValueError("Inconsistent secondary-structure annotation columns")
+
+    for raw_type, beg_chain, beg_res, end_chain, end_res in zip(*columns):
+        if beg_chain != end_chain:
             continue
         try:
-            start = int(beg_res[i])
-            end = int(end_res[i])
-        except ValueError:
+            start = int(beg_res)
+            end = int(end_res)
+        except (TypeError, ValueError):
             continue
-        ss_type = ss_type_to_char(conf_types[i])
-        ss_blocks[chain_id].append({
+        if start < 1 or end < start:
+            continue
+
+        ss_type = forced_type or ss_type_to_char(str(raw_type))
+        key = (beg_chain, start, end, ss_type)
+        if key in seen:
+            continue
+        seen.add(key)
+        ss_blocks[beg_chain].append({
             'type': ss_type,
             'start': start,
-            'end': end
+            'end': end,
         })
 
+
+def extract_secondary_structure_blocks(cif_file):
+    """Extract helix/turn/bend and beta-sheet residue ranges from mmCIF."""
+    cif_dict = MMCIF2Dict(cif_file)
+    ss_blocks = defaultdict(list)
+    seen = set()
+
+    _append_structure_blocks(
+        ss_blocks,
+        seen,
+        cif_dict.get('_struct_conf.conf_type_id'),
+        cif_dict.get('_struct_conf.beg_label_asym_id'),
+        cif_dict.get('_struct_conf.beg_label_seq_id'),
+        cif_dict.get('_struct_conf.end_label_asym_id'),
+        cif_dict.get('_struct_conf.end_label_seq_id'),
+    )
+
+    # Beta-sheet ranges are stored in their own mmCIF category.
+    sheet_beg_chains = cif_dict.get('_struct_sheet_range.beg_label_asym_id')
+    _append_structure_blocks(
+        ss_blocks,
+        seen,
+        ['SHEET'] * len(_as_list(sheet_beg_chains)),
+        sheet_beg_chains,
+        cif_dict.get('_struct_sheet_range.beg_label_seq_id'),
+        cif_dict.get('_struct_sheet_range.end_label_asym_id'),
+        cif_dict.get('_struct_sheet_range.end_label_seq_id'),
+        forced_type='E',
+    )
+
+    for blocks in ss_blocks.values():
+        blocks.sort(key=lambda block: (block['start'], block['end'], block['type']))
     return ss_blocks
 
 def ss_type_to_char(ss_type):
+    ss_type = ss_type.upper()
     if "HELX" in ss_type:
         return "H"
-    elif "SHEET" in ss_type:
+    elif "SHEET" in ss_type or "STRN" in ss_type:
         return "E"
     elif "TURN" in ss_type:
         return "T"
@@ -74,6 +138,8 @@ def ss_type_to_char(ss_type):
 def extract_hierarchical(cif_file):
     structure = load_structure(cif_file)
     sequences, _ = extract_sequences(structure)
+    if not sequences:
+        raise ValueError("No peptide sequence recovered from structure")
     ss_block_data = extract_secondary_structure_blocks(cif_file)
     hierarchical_structure = {}
     for k in sequences.keys():
@@ -120,19 +186,6 @@ def process(structure):
         complete_seq = add_space_between_uppercase(complete_seq)
     return complete_seq
 
-def fallback_marked_from_plain(plain_seq: str):
-    """
-    ### >>> CHANGE
-    没有 CIF / 解析失败时的 fallback：
-    仍然生成一个可被 tokenizer 处理的 marked 序列，保证 protein.csv 不缺行、不漂移。
-    ### <<< CHANGE
-    """
-    if plain_seq is None:
-        plain_seq = ""
-    plain_seq = str(plain_seq).strip().replace(" ", "")
-    marked = "[tertiary_start]" + plain_seq + "[tertiary_end]"
-    return add_space_between_uppercase(marked)
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='settings')
     parser.add_argument('--dataset', type=str, default="drugbank",
@@ -161,36 +214,34 @@ if __name__ == "__main__":
 
     n_total = len(df_proteins)
     n_cif_ok = 0
-    n_fallback = 0
+    n_missing_cif = 0
+    n_empty_cif = 0
+    n_parse_failed = 0
 
     for i in tqdm(range(n_total), desc=f"[build protein.csv] {args.dataset}"):
         pid = str(df_proteins.iloc[i]['protein_id']).strip()
-        plain_seq = df_proteins.iloc[i]['protein']
-
         cif_path = f"./data/{args.dataset}/cif/{pid}.cif"
-        use_fallback = False
 
-        # ### >>> CHANGE
-        # 以前：没 cif 就 continue（导致 protein.csv 缺行、nid 漂移）
-        # 现在：没 cif / 空文件 -> fallback（仍然写入 protein.csv）
-        # ### <<< CHANGE
-        if (not os.path.exists(cif_path)) or os.path.getsize(cif_path) == 0:
-            use_fallback = True
-        else:
-            try:
-                hierarchical_structure = extract_hierarchical(cif_path)
-                process_seq = process(hierarchical_structure)
-            except Exception:
-                use_fallback = True
+        if not os.path.exists(cif_path):
+            n_missing_cif += 1
+            continue
+        if os.path.getsize(cif_path) == 0:
+            n_empty_cif += 1
+            continue
 
-        if use_fallback:
-            process_seq = fallback_marked_from_plain(plain_seq)
-            n_fallback += 1
-        else:
-            n_cif_ok += 1
+        try:
+            hierarchical_structure = extract_hierarchical(cif_path)
+            process_seq = process(hierarchical_structure)
+            if not process_seq.strip():
+                raise ValueError("Tagged protein sequence is empty")
+        except Exception as exc:
+            n_parse_failed += 1
+            tqdm.write(f"[WARN] failed to parse {pid}: {exc}")
+            continue
 
         pids.append(pid)
         seqs.append(process_seq)
+        n_cif_ok += 1
 
     new_df_proteins = pd.DataFrame({
         'protein_id': pids,
@@ -198,7 +249,11 @@ if __name__ == "__main__":
     })
     out_protein_csv = f'./data/{args.dataset}/protein.csv'
     new_df_proteins.to_csv(out_protein_csv, index=False)
-    print(f"[OK] wrote {out_protein_csv} (N={len(new_df_proteins)}, cif_ok={n_cif_ok}, fallback={n_fallback})")
+    print(
+        f"[OK] wrote {out_protein_csv} "
+        f"(retained={n_cif_ok}, missing_cif={n_missing_cif}, "
+        f"empty_cif={n_empty_cif}, parse_failed={n_parse_failed})"
+    )
 
     # new nid mapping: row index in ./data/{dataset}/protein.csv
     pid2nid = {pid: nid for nid, pid in enumerate(new_df_proteins['protein_id'].tolist())}
