@@ -1,0 +1,16 @@
+dataset,protocol,split,seed,samples,drugs,proteins,positive,negative,removed_unavailable_structure
+human,random,train,57,4779,2359,1823,2089,2690,18
+human,random,val,57,597,472,463,254,343,2
+human,random,test,57,598,475,447,283,315,3
+human,cold_drug,train,57,4693,2177,1780,2036,2657,20
+human,cold_drug,val,57,576,272,424,228,348,2
+human,cold_drug,test,57,705,274,559,362,343,1
+human,cold_protein,train,57,4785,2366,1590,2149,2636,19
+human,cold_protein,val,57,567,456,197,227,340,4
+human,cold_protein,test,57,622,490,201,250,372,0
+human,cold_pair,train,57,3763,1899,1418,1659,2104,16
+human,cold_pair,val,57,57,53,48,18,39,0
+human,cold_pair,test,57,67,45,56,27,40,0
+human,cluster_start,train,57,4049,1928,1499,1859,2190,14
+human,cluster_start,val,57,57,54,44,19,38,0
+human,cluster_start,test,57,54,45,45,24,30,0

@@ -1,0 +1,9 @@
+-r requirements.txt
+
+# CIF processing and frozen encoder feature generation.
+transformers==4.24.0
+tokenizers==0.13.3
+huggingface-hub==0.33.4
+requests==2.32.4
+biopython==1.83
+tqdm==4.67.1

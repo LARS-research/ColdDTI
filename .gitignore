@@ -15,24 +15,65 @@ env/
 .idea/
 .vscode/
 
-# data/**
-# !data/
-# !data/README_data.md
-
-output/**
-!output/
-
-logs
+# Generated training outputs and local diagnostics
+/output/
+/logs/
+/validation/
+/reviewer_validation/
+/reviewer_data/
+.pytest_cache/
+.coverage
+htmlcov/
+.artifacts.lock
+.preprocess-transaction/
+.preprocess-*/
+.feature-*/
+.feature_status.json-*
+.config.json-*
+.manifest.json-*
+.*.pt-*
+.*.restore
 
 # Large generated or downloaded artifacts, wherever they appear
 *.cif
+*.cif.gz
+*.mmcif
+*.mmcif.gz
+*.pdb
+*.pdb.gz
 *.npy
+*.npy.gz
 *.npz
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.joblib
 *.pt
 *.pth
 *.ckpt
 *.bin
 *.safetensors
+*.onnx
+
+# Local encoder/model assets (the lowercase model/ source directory is tracked)
+/Model/
+/models/
+/prot_bert/
+/prot_resize/
+/ChemBERTa-77M-MLM/
+/checkpoints/
+/weights/
+/features/
+
+# Generated archives and downloaded resource bundles
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tar.xz
+*.7z
 
 # Logs
 *.log
@@ -42,3 +83,4 @@ logs
 
 # Manuscript drafts and local notes
 bioinformatics.pdf
+/PROJECT_STATUS.md

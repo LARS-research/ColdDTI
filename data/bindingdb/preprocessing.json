@@ -1,0 +1,49 @@
+{
+  "dataset": "bindingdb",
+  "split_seed": 57,
+  "source_cleaning": {
+    "source_rows": 47481,
+    "conflicting_rows": 191,
+    "conflicting_pairs": 86,
+    "duplicate_rows_removed": 216,
+    "clean_observations": 47074,
+    "source_file": "bindingDB_mapped.csv"
+  },
+  "tertiary_mode": "chain",
+  "domain_annotation_csv": false,
+  "model_index": 0,
+  "selected_chains": null,
+  "structure_rule": "available, nonempty, successfully parsed, amino-acid sequence recovered",
+  "numbering": "mmCIF label_asym_id and label_seq_id; mapped to recovered residue positions",
+  "secondary_fields": [
+    "struct_conf",
+    "struct_sheet_range"
+  ],
+  "tertiary_domain_fields": "pdbx_domain_range or explicit label-residue CSV",
+  "candidates": 2205,
+  "retained_proteins": 2162,
+  "structure_status_counts": {
+    "ok": 2162,
+    "missing": 43
+  },
+  "basic_ratio": "80/10/10 interaction counts for random; held-out entity counts for cold",
+  "basic_partition_order": "partition clean source observations, then remove unavailable structures",
+  "cluster_protocol": "frozen upstream cluster groups, merged by actual entity identity; groups repartitioned 80/10/10",
+  "cluster_upstream_method": "Legacy cluster membership snapshot; original clustering provenance not verified",
+  "temporal_protocol": {
+    "cutoff_year": 2010,
+    "known_dates_required": true,
+    "train": "both years <= cutoff",
+    "test": "at least one year > cutoff",
+    "validation_fraction_of_historical": 0.2,
+    "note": "entity-date split; no interaction discovery timestamps"
+  },
+  "protocols": [
+    "random",
+    "cold_drug",
+    "cold_protein",
+    "cold_pair",
+    "cluster_start"
+  ],
+  "audit_passed": true
+}

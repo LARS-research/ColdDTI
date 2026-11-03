@@ -1,0 +1,16 @@
+dataset,protocol,split,seed,samples,drugs,proteins,positive,negative,removed_unavailable_structure
+bindingdb,random,train,57,37412,14098,2039,15653,21759,247
+bindingdb,random,val,57,4685,3905,943,1963,2722,22
+bindingdb,random,test,57,4670,3901,965,1966,2704,38
+bindingdb,cold_drug,train,57,37229,11623,2011,15643,21586,230
+bindingdb,cold_drug,val,57,4709,1450,961,1976,2733,31
+bindingdb,cold_drug,test,57,4829,1455,974,1963,2866,46
+bindingdb,cold_protein,train,57,37759,14032,1740,16565,21194,157
+bindingdb,cold_protein,val,57,4267,3544,214,1482,2785,56
+bindingdb,cold_protein,test,57,4741,3633,208,1535,3206,94
+bindingdb,cold_pair,train,57,30025,11227,1617,13222,16803,121
+bindingdb,cold_pair,val,57,394,338,93,140,254,5
+bindingdb,cold_pair,test,57,498,367,83,157,341,16
+bindingdb,cluster_start,train,57,31455,11041,1633,12865,18590,233
+bindingdb,cluster_start,val,57,319,227,105,133,186,1
+bindingdb,cluster_start,test,57,279,228,83,113,166,3

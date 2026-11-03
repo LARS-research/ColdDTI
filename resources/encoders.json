@@ -1,0 +1,102 @@
+{
+  "prot_bert": {
+    "repo_id": "Rostlab/prot_bert",
+    "revision": "7a894481acdc12202f0a415dd567f6cfdb698908",
+    "source": "https://huggingface.co/Rostlab/prot_bert",
+    "files": {
+      "config.json": {
+        "bytes": 361,
+        "sha256": "44c1e1229d520841e5b29f1dd2292595219061daf0c5f5dacb4f68d1272d69a3"
+      },
+      "pytorch_model.bin": {
+        "bytes": 1684058277,
+        "sha256": "6ea3edd26cfefc3111176100ee2a027ed510f9c86b63e5b53a2a050b59f2af9d"
+      },
+      "special_tokens_map.json": {
+        "bytes": 112,
+        "sha256": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3"
+      },
+      "tokenizer_config.json": {
+        "bytes": 86,
+        "sha256": "73f5e97ab29042bac49dc96f7b8a7a790994509bbd2fe3e9cd4f59affc46c2ce"
+      },
+      "vocab.txt": {
+        "bytes": 81,
+        "sha256": "7ea18f4fe3a796c1146f9830d50334a251f368db96bdd0606e78846ca3a30607"
+      }
+    }
+  },
+  "ChemBERTa-77M-MLM": {
+    "repo_id": "DeepChem/ChemBERTa-77M-MLM",
+    "revision": "ed8a5374f2024ec8da53760af91a33fb8f6a15ff",
+    "source": "https://huggingface.co/DeepChem/ChemBERTa-77M-MLM",
+    "files": {
+      "added_tokens.json": {
+        "bytes": 25,
+        "sha256": "2b0e66b84bd97bc08467f7a7c033cfd5a66c6335eb79779a144b50f8e7b2557d"
+      },
+      "config.json": {
+        "bytes": 631,
+        "sha256": "b9ec477f76a173461741cb0f339b89661c9d9249af2f6a84df7593c3baede9b0"
+      },
+      "merges.txt": {
+        "bytes": 52,
+        "sha256": "291976363a8a20ed148ff687cf3da54ada8ddbc99655fa876326f0ef28dbd6ad"
+      },
+      "pytorch_model.bin": {
+        "bytes": 13734116,
+        "sha256": "95571af26b61ba8d56b9d61ff108b5c9afe96fd69ea3cbd1901d9421e3d2dd6d"
+      },
+      "special_tokens_map.json": {
+        "bytes": 420,
+        "sha256": "23dbc119b7e11cb23d3c43b13004c5a4ab4e6530c7146e34fa1f9564856b5580"
+      },
+      "tokenizer.json": {
+        "bytes": 8262,
+        "sha256": "1197005224bc8917f46f8d6fc360aec71c6626858966e167b2ff8af62214f814"
+      },
+      "tokenizer_config.json": {
+        "bytes": 1271,
+        "sha256": "79919cd4b54bdf241f19956753e8a47b8b782eb4b38eec0e0254bd2434545abd"
+      },
+      "vocab.json": {
+        "bytes": 6963,
+        "sha256": "0c9afbd534ab59fa51718c998027da0e7932293c9a51de03317d4c83d3fe48f6"
+      }
+    }
+  },
+  "prot_resize": {
+    "source": "Local expanded ProtBERT encoder recovered from Code-DTI/Model/prot_resize",
+    "base_model": "prot_bert",
+    "files": {
+      "added_tokens.json": {
+        "bytes": 170,
+        "sha256": "9966ec20731b7c9c1c9debe51d0a3dcdc655ff2e12d8487f0252552907b9ffb6"
+      },
+      "config.json": {
+        "bytes": 624,
+        "sha256": "74f692aae56054c703b0a82a0b313b4c6576b4b05a08693ecbb3ca4014c279c6"
+      },
+      "pytorch_model.bin": {
+        "bytes": 1680239786,
+        "sha256": "d913464c6da65aa68740323331ce3d62053895ce9cbe174bd47390eb7517c70b"
+      },
+      "special_tokens_map.json": {
+        "bytes": 125,
+        "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+      },
+      "tokenizer.json": {
+        "bytes": 4726,
+        "sha256": "d2546a90b2aeb71d765a5bc7e0ec121f74d43f183679e4a5aa7f9ca59bfd082f"
+      },
+      "tokenizer_config.json": {
+        "bytes": 406,
+        "sha256": "e8952279ebcd6c5b98f2567a033ea08721aaeb0b7ba83bdc346c359e49517ef4"
+      },
+      "vocab.txt": {
+        "bytes": 81,
+        "sha256": "7ea18f4fe3a796c1146f9830d50334a251f368db96bdd0606e78846ca3a30607"
+      }
+    }
+  }
+}

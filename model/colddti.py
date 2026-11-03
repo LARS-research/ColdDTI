@@ -39,46 +39,17 @@ import math
 #         return last_hidden_state.new_empty((1, 0, hidden_dim))  # 无子序列时返回空张量
 #     return torch.stack(all_subseq_reprs, dim=0).unsqueeze(0)  # [bsz, num_subsequences_total, hidden_dim]
 def extract_subseq_tensor(input_ids, last_hidden_state, start_token_id, end_token_id):
+    """Inclusive marker pooling; no annotation uses a documented global mean.
+
+    Broken marker pairs raise instead of silently changing the model branch.
+    Variable-length training passes one pair at a time.
     """
-    input_ids: Tensor [bsz, seq_len]
-    last_hidden_state: Tensor [bsz, seq_len, hidden_dim]
-    return: Tensor [bsz, num_subseq, hidden_dim]
-    NOTE: will NEVER return empty num_subseq=0 (to avoid NaN downstream).
-    """
-    all_subseq_reprs = []
-    hidden_dim = last_hidden_state.size(-1)
+    from .segments import marker_spans
+    tokens = input_ids.reshape(-1).tolist()
+    spans = marker_spans(tokens, start_token_id, end_token_id)
+    values = [last_hidden_state[:, left - 1:right + 1].mean(dim=1) for left, right in spans]
+    return torch.stack(values, dim=1) if values else last_hidden_state.mean(dim=1, keepdim=True)
 
-    # 假设 bsz=1（你 pipeline 里确实经常是 1；即使 >1 也先用第 0 个，不改你原逻辑）
-    input_ids_i = input_ids[0]            # [seq_len]
-    hidden_i = last_hidden_state[0]       # [seq_len, hidden_dim]
-
-    start_positions = (input_ids_i == start_token_id).nonzero(as_tuple=False).squeeze(-1).tolist()
-    end_positions   = (input_ids_i == end_token_id).nonzero(as_tuple=False).squeeze(-1).tolist()
-
-    # 如果 start/end 数量不一致，直接 fallback（不要 raise，让训练继续）
-    if len(start_positions) != len(end_positions):
-        # fallback: 用整条 protein 的 mean 作为一个“伪子段”
-        fallback = hidden_i.mean(dim=0, keepdim=True)   # [1, hidden_dim]
-        return fallback.unsqueeze(0)                    # [1, 1, hidden_dim]
-
-    # 配对遍历
-    for s, e in zip(start_positions, end_positions):
-        if s >= e:
-            continue
-        if e - s <= 1:
-            continue  # 空子段，跳过
-
-        subseq_hidden = hidden_i[s:e+1]                 # [len_subseq, hidden_dim]
-        subseq_mean = subseq_hidden.mean(dim=0)         # [hidden_dim]
-        all_subseq_reprs.append(subseq_mean)
-
-    # 如果一个有效子段都没有：fallback（这是你现在 NaN 的主要来源）
-    if len(all_subseq_reprs) == 0:
-        fallback = hidden_i.mean(dim=0, keepdim=True)   # [1, hidden_dim]
-        return fallback.unsqueeze(0)                    # [1, 1, hidden_dim]
-
-    # 正常返回
-    return torch.stack(all_subseq_reprs, dim=0).unsqueeze(0)  # [1, num_subseq, hidden_dim]
 class SelfAttention(nn.Module):
     def __init__(self, dim, n_heads):
         super(SelfAttention, self).__init__()
@@ -87,12 +58,12 @@ class SelfAttention(nn.Module):
         self.n_heads = n_heads
 
         assert dim % n_heads == 0, f"dim = {dim}, while n_heads = {n_heads}"
-        self.attn = nn.MultiheadAttention(dim, n_heads)
+        self.attn = nn.MultiheadAttention(dim, n_heads, batch_first=True)
         self.fc = nn.Linear(dim, dim)
         self.ln = nn.LayerNorm(dim)
 
     def forward(self, x):
-        hid = self.ln(self.attn(x, x, x)[0] + x)
+        hid = self.ln(self.attn(x, x, x, need_weights=False)[0] + x)
         hid = self.ln(self.fc(hid) + hid)
         return hid
 

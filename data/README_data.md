@@ -1,53 +1,36 @@
-# Dataset information
+# Current ColdDTI data
 
-## Overview
+The four paper datasets use split seed=57. See the
+[reproduction guide](../README.md) for protocols, scope modes and runnable commands.
 
-This project uses four benchmark datasets for drug-target interaction (DTI) prediction:
+Each dataset directory contains:
 
-- **BindingDB**
-- **BioSNAP**
-- **Human**
-- **DrugBank**
+- `observations.csv`: cleaned source benchmark pairs before structure filtering.
+- `source_proteins.csv`, `smiles.csv`: standalone entity input snapshots.
+- `protein.csv`: the currently selected structure-tagged proteins; row numbers define `protein_nid`.
+- `structure_coverage.csv`: accepted/rejected structures, reasons and scope counts.
+- `preprocessing.json`: actual tag modes, source cleaning and protocol definitions.
+- `split_statistics.csv`: each partition's samples/entities/positive/negative counts.
+- `feature_status.json`: versioned branch manifests and file/input digests; only a fully validated `ready=true` cache can be loaded.
+- `cluster_groups/`: fixed upstream cluster members, merged by actual entity identity.
 
-All datasets were obtained from their official sources or official benchmark release pages and were further processed into a unified format for model training and evaluation.
+Every split uses the same protein index table. Basic cold settings hold out the
+corresponding entity identities; cluster settings hold out both identity groups.
+DrugBank entity-date temporal splitting uses a 2010 cutoff and pair-disjoint
+historical training/validation versus future-entity test examples.
 
-## Data Sources
+CIFs, frozen encoder checkpoints and generated `.npy` feature arrays are excluded
+from Git. Generate features locally with `get_emb.py` using the supplied tagged
+protein table and local encoders; CIFs are needed only to rebuild structure tags.
+The cache status prevents stale features from being used for training. Data
+statistics after all filtering are in the root `split_statistics.csv`.
 
-### 1. BindingDB
-BindingDB is a public database of experimentally measured binding affinities between proteins and small molecules.
+The BindingDB benchmark source is `bindingDB_mapped.csv`; the reported filtering
+statistics cover processing of this benchmark input snapshot.
+`bindingdb/mapping_statistics.json` records the recovered labeled-benchmark
+mapping and subsequent cleaning/structure-filtering counts.
 
-- Official website: https://www.bindingdb.org/
-- Official download page: https://www.bindingdb.org/rwd/bind/chemsearch/marvin/Download.jsp
-
-### 2. BioSNAP
-BioSNAP provides curated biomedical network datasets. In this project, we use the drug-target interaction benchmark released through the Stanford SNAP BioSNAP collection.
-
-- Official BioSNAP dataset page: https://snap.stanford.edu/biodata/datasets/10015/10015-ChG-TargetDecagon.html
-- BioSNAP collection page: https://snap.stanford.edu/biodata/
-
-### 3. Human
-The Human dataset used in this project is a widely adopted DTI benchmark dataset from the benchmark release used in prior DTI studies.
-
-- Official benchmark release source: https://github.com/lifanchen-simm/transformerCPI
-- Human dataset file: https://github.com/lifanchen-simm/transformerCPI/blob/master/Human%2CC.elegans/dataset/human_data.txt
-
-### 4. DrugBank
-DrugBank is a comprehensive knowledgebase integrating drug information with drug-target associations.
-
-- Official website: https://go.drugbank.com/
-- Official release/download page: https://go.drugbank.com/releases/latest
-
-## Download Policy
-
-The raw datasets were obtained from the official websites or official benchmark release pages listed above.
-
-
-## Directory Structure
-
-```bash
-Dataset/
-├── bindingdb/
-├── biosnap/
-├── human/
-├── drugbank/
-└── README.md
+DrugBank also includes `drug_identifiers.csv`, joined by actual SMILES, and
+`protein_regions.csv`, containing transmembrane annotations for the case-study
+muscarinic receptor proteins. Region positions use one-based source-sequence
+numbering; sequence SHA256 values identify their coordinate reference.

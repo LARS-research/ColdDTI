@@ -1,0 +1,16 @@
+dataset,protocol,split,seed,samples,drugs,proteins,positive,negative,removed_unavailable_structure
+biosnap,random,train,57,20624,4434,2039,10376,10248,130
+biosnap,random,val,57,2583,1844,1257,1267,1316,11
+biosnap,random,test,57,2579,1824,1256,1346,1233,16
+biosnap,cold_drug,train,57,20684,3599,2039,10417,10267,126
+biosnap,cold_drug,val,57,2442,450,1217,1193,1249,16
+biosnap,cold_drug,test,57,2660,450,1317,1379,1281,15
+biosnap,cold_protein,train,57,20493,4424,1633,10278,10215,107
+biosnap,cold_protein,val,57,3010,2040,204,1706,1304,18
+biosnap,cold_protein,test,57,2283,1729,204,1005,1278,32
+biosnap,cold_pair,train,57,16442,3537,1631,8254,8188,86
+biosnap,cold_pair,val,57,296,206,126,158,138,1
+biosnap,cold_pair,test,57,215,160,130,96,119,5
+biosnap,cluster_start,train,57,16595,3544,1636,8356,8239,103
+biosnap,cluster_start,val,57,233,173,123,119,114,4
+biosnap,cluster_start,test,57,255,173,124,124,131,0

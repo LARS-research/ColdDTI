@@ -1,0 +1,4 @@
+{
+  "ready": false,
+  "reason": "Structure tags/indices were regenerated. Run get_emb.py for this data directory."
+}

@@ -1,0 +1,22 @@
+{
+  "source": "Code-DTI/Dataset/bindingdb/bindingDB.csv",
+  "source_labeled_benchmark_rows": 49199,
+  "mapping": {
+    "retained_rows": 47481,
+    "excluded_unmapped_protein_sequence_rows": 1718,
+    "identity": "exact sequence and supplied SMILES identities"
+  },
+  "cleaning": {
+    "source_rows": 47481,
+    "conflicting_rows": 191,
+    "conflicting_pairs": 86,
+    "duplicate_rows_removed": 216,
+    "clean_observations": 47074,
+    "source_file": "bindingDB_mapped.csv"
+  },
+  "structure_filtering": {
+    "retained_interactions": 46767,
+    "excluded_interactions": 307
+  },
+  "verification": "Recovered map + pair cleaning reproduced observations.csv exactly in row order, identities and labels"
+}

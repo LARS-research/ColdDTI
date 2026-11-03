@@ -1,0 +1,6 @@
+-r requirements-preprocess.txt
+
+# Recovered clustering, raw BindingDB chemistry processing and case-study plots.
+scipy==1.10.1
+rdkit==2024.3.5
+matplotlib==3.7.5

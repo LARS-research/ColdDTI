@@ -1,0 +1,22 @@
+protein_id,region_type,start,end,description,source,numbering,reference_sequence_sha256
+P08173,Transmembrane,32,54,Helical; Name=1,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,69,89,Helical; Name=2,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,107,128,Helical; Name=3,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,149,171,Helical; Name=4,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,194,216,Helical; Name=5,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,402,422,Helical; Name=6,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P08173,Transmembrane,437,456,Helical; Name=7,https://www.uniprot.org/uniprotkb/P08173,"canonical sequence, one-based inclusive",f70d1259f715e6623d47df37bf5b8b7588be8a29df97c3395ddcf28f3c3d0593
+P20309,Transmembrane,68,91,Helical; Name=1,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,105,130,Helical; Name=2,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,143,164,Helical; Name=3,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,185,206,Helical; Name=4,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,230,252,Helical; Name=5,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,492,514,Helical; Name=6,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P20309,Transmembrane,527,546,Helical; Name=7,https://www.uniprot.org/uniprotkb/P20309,"canonical sequence, one-based inclusive",f3a234965b33be052fd4748f042f809d2add6da3b3f556da4c51eca393e1fe9d
+P11229,Transmembrane,23,48,Helical; Name=1,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,63,84,Helical; Name=2,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,96,121,Helical; Name=3,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,143,164,Helical; Name=4,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,186,209,Helical; Name=5,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,367,390,Helical; Name=6,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
+P11229,Transmembrane,398,420,Helical; Name=7,https://www.uniprot.org/uniprotkb/P11229,"canonical sequence, one-based inclusive",a9d70e6dd79a9d6d5fef6772b08efb426eba56ffbc49737c550220e71c521746
